@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import Tag from './Tag.js';
+import Tag from './Thought.js';
 
 interface IApplication extends Document {
   published: boolean;
