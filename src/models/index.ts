@@ -1,5 +1,5 @@
-import User from './User.js';
-import Tag from './Thought.js';
-import Application from './Application.js';
+import User from './Users.js';
+import Thought from './Thoughts.js';
 
-export { User, Application, Tag };
+
+export { User, Thought };

@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 
-const userSchema = new Schema({
+const usersSchema = new Schema({
   username: {
     type: String,
     unique: true,
@@ -28,13 +28,14 @@ const userSchema = new Schema({
 }, {
   toJSON: {
     virtuals: true,
+    getters: true,
   },
   id: false,
 });
 
-userSchema.virtual('friendCount').get(function () {
-  return this.friends.length;
+usersSchema.virtual('friendCount').get(function () {
+  return this.friends?.length;
 });
 
-const User = model('User', userSchema);
+const User = model('User', usersSchema);
 export default User;

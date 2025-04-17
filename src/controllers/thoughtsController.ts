@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
-import Thought from '../models/Thought';
-import User from '../models/User';
+import { Request, Response } from "express";
+import { User, Thought } from "../models/index.js";
 
-export const getAllThoughts = async (req: Request, res: Response) => {
+export const getAllThoughts = async (_req: Request, res: Response) => {
   try {
     const thoughts = await Thought.find();
     res.json(thoughts);
@@ -11,11 +10,15 @@ export const getAllThoughts = async (req: Request, res: Response) => {
   }
 };
 
-export const getThoughtById = async (req: Request, res: Response) => {
+export const getThoughtById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const thought = await Thought.findById(req.params.thoughtId);
     if (!thought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      res.status(404).json({ message: "Thought not found" });
+      return;
     }
     res.json(thought);
   } catch (err) {
@@ -40,7 +43,10 @@ export const createThought = async (req: Request, res: Response) => {
   }
 };
 
-export const updateThought = async (req: Request, res: Response) => {
+export const updateThought = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       req.params.thoughtId,
@@ -49,7 +55,8 @@ export const updateThought = async (req: Request, res: Response) => {
     );
 
     if (!updatedThought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      res.status(404).json({ message: "Thought not found" });
+      return;
     }
 
     res.json(updatedThought);
@@ -58,12 +65,18 @@ export const updateThought = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteThought = async (req: Request, res: Response) => {
+export const deleteThought = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const deletedThought = await Thought.findByIdAndDelete(req.params.thoughtId);
+    const deletedThought = await Thought.findByIdAndDelete(
+      req.params.thoughtId
+    );
 
     if (!deletedThought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      res.status(404).json({ message: "Thought not found" });
+      return;
     }
 
     await User.findOneAndUpdate(
@@ -71,14 +84,14 @@ export const deleteThought = async (req: Request, res: Response) => {
       { $pull: { thoughts: deletedThought._id } }
     );
 
-    res.json({ message: 'Thought deleted' });
+    res.json({ message: "Thought deleted" });
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
 // Reactions
-export const addReaction = async (req: Request, res: Response) => {
+export const addReaction = async (req: Request, res: Response) : Promise<void> => {
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       req.params.thoughtId,
@@ -87,7 +100,8 @@ export const addReaction = async (req: Request, res: Response) => {
     );
 
     if (!updatedThought) {
-      return res.status(404).json({ message: 'Thought not found' });
+    res.status(404).json({ message: "Thought not found" });
+    return;
     }
 
     res.json(updatedThought);
@@ -96,7 +110,7 @@ export const addReaction = async (req: Request, res: Response) => {
   }
 };
 
-export const removeReaction = async (req: Request, res: Response) => {
+export const removeReaction = async (req: Request, res: Response) : Promise<void> => {
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       req.params.thoughtId,
@@ -105,7 +119,8 @@ export const removeReaction = async (req: Request, res: Response) => {
     );
 
     if (!updatedThought) {
-      return res.status(404).json({ message: 'Thought not found' });
+    res.status(404).json({ message: "Thought not found" });
+    return;
     }
 
     res.json(updatedThought);
